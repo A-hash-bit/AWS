@@ -1,0 +1,22 @@
+* How to secure EC2 instance?
+ 1. Use strong IAM role for least privilages.
+ 2. Create custom VPC for EC2 isolation.
+ 3. Configure firewall, Security group for EC2. its stateful. accept/deny req. from particular IPs.
+ 4. NACL at subnet level. its stateless, need to configure inbound and outbound both.
+ 5. use SSH key-value pair for cli access, username/passwd is old way. 
+ 6. Put sensitive server in private subnet for isolation.
+ 7. Regular patched and updates for EC2.
+ 8. Never use Root access or admin access for any user, give specific access.
+ 9. Encrypt data, use EBS (by default EBS data id encrypted at rest, KMS create data-key and encrypt data before storing).
+ 10. MFA.
+ 11. Monitoring - Cloud watch alarm for suspicious activity.
+ 12. Limit metadata access.
+ 13. Use bastion server (req. to EC2 goes through bastion, it authenticate and authorise the req.)
+ 14. reguler data backup, if lost or deleted by accident/hacker.
+ 15. Close unused ports.
+ 16. AWS inspector - It run security assessments to identify vulnerabilities.
+ 17. WAF/AWS sheild for DDoS protection, especially for internet facing instances.
+     - AWS WAF(Web Application Firewall) provides protection on the application layer and AWS Shield protects the infrastructure layers of the OSI model.
+ 18. regular check for IAM Roles/Users/Policies
+ 19. Regular audits to identify weaknesses.
+ 20. Trusted Advisor - revive aws setup gives recommendations.
