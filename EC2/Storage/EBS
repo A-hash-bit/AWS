@@ -56,6 +56,12 @@ By default AMI deteremine if u get EBS or instance store as root vol.
    3. if need to delete/detach the vol
       - umount /device-name  (unmount)
       - then detach from vol section
+================================================
+# If want to resize attached vol.
+1. Recommend - stop the instance.
+2. modify instance (size can only be increased)
+3. need to adjust file system for increased vol. sudo resize2fs /device-name
+4. mount /device-name /my-vol
 
   
   
