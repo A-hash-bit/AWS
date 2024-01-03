@@ -1,0 +1,61 @@
+Ec2 have multiple storage options. like instance store, EBS, EFS, S3.
+ - selection depends on requirement - performance, durability.
+
+By default AMI deteremine if u get EBS or instance store as root vol.
+*EBS - elastic block storage
+ - provides block level storage.
+ - similar to hard drive, raw block device
+ - Can mount these vol. as device to EC2.
+ - If its root volume (bydefault its ephimeral, while creating EC2 configure to not delete with instance.)
+ - If attach as additional vol. then its persistant.
+
+ # When to use
+  1. quick access of data.
+  2. long term persistence.
+  3. for file system, DB
+
+* Need EC2 and vol in same AZ
+  - only one to one mapping of EC2-EBS at one time, detach and attach to another instance is possible.
+  - if want to attach to EC2 in diff. AZ then take SnapShot, create new vol from that snapshot in req. AZ and use.
+  - not encrypted by default at rest, but can use KMS for encryption.
+  - can create Snapshot(Backups) of EBS and get stored in S3.
+  - can use cloud watch to get diff. metrics for EBS vol. for monitoring
+  
+  # Types of EBS
+   1. General purpose SSD.(gp2,gp3)
+      - balance between price & preformance(IOPS).
+      - use as boot vol., medium size single instance DB, dev/test env.
+   2. Provisioned IOPS SSD.(io1,io2)
+      - need for intense IO workloads, consistance IOPS
+  * HHD is magnetic storage
+   3. Throughput Optimised HDD(st1) 
+      - low cost, better throughput
+      - log processing, data warehouse, ETL etc. large data
+   4. Cold HDD(sc1)
+      - lower cost, infrequent access, little high latency
+
+  ++++++++++ Instance store Vs EBS ++++++++++++
+  * Both are block level storage.
+  * Depends on AMI.
+  * EBS is permanent, instance store is not.
+  * Can take snapshot of EBS, not for Instance store.
+  * Encription for EBS is possible but not for Instance store.
+  * EBS have type, Instance store is on HDD
+
+  =============================================
+  How to create and attach EBS.
+   1. while creating EC2 instance add EBS as storage (no more configuration req.) - u can check with df -h, and look for vol. device name.
+   2. after ec2 is already created.
+    - go to volume, create vol. in same AZ as EC2., now attach it to Instance(via action).
+    - now need to mount this vol.
+      - lsblk (list all block devices mounted/not mounted)
+      - create a dir (mkidr /my-vol)
+      - create filesystem for the new vol. (mkfs -t ext4 /(device name))- its a one time task, if u do it again u will loose data
+        * device name gets created when we create vol., check name in vol.
+      - mount /device-name /my-vol
+   3. if need to delete/detach the vol
+      - umount /device-name  (unmount)
+      - then detach from vol section
+
+  
+  
