@@ -1,0 +1,27 @@
+IAM IDP (identity provider) in aws provide a way to give access of aws console/services to a user/application which is outside of AWS. user is managed with some third party Identity providers.
+* Identity providers (IdPs) are entities that manage and authenticate user identities, allowing individuals to access various services or applications securely
+  eg- SAML providers, OpenID Connect providers, Microsoft Azure Active Directory, Okta, Ping Identity etc.
+
+* Advantage
+   1. no need to provide aws security creds, access key etc which makes aws account secure.
+   2. no need to create long term creds. user will use its creds(from IDP) to login to aws.
+
+* How it works.
+  - create user/s in IDP, configure them for SSO. u will get an XML file
+  - u will create IAM IDP entity to establish trust relationship between your AWS account and third party IDP. use the XML file from earlier step to create trust relationship.
+  - create a role with SAML or openID connect(web identity provider) and appropriate access.
+
+# eg with jumpcloud third party IDP tool.
+- jumpcloud is SAML type
+ 1. login/signup to jumpcloud.
+ 2. create/add user/s, activate user if required.
+ 3. set up SSO.
+   - search AWS --> select IAM option -->configure (new sso app)
+   - after successful configuration get "Export Metadata" (XML file) - required while creating IAM IDP.for trust relationship.
+   - go to (new sso app) and under SSO --> constant Attribute (Provide IAM role arn and IAM IDP arn)
+* In AWS go to IDP --> create SAML type IDP, provide the XML from SSO.
+  thenn create a role with type SAML and req. permissions.
+ 4. Map the users in jumpcloud to SSO app.
+    create group, add users to it, and give application access to the group.
+  - go to user , under details --> custom attribute add (Provide IAM role arn and IAM IDP arn) - to give user the permission to login to aws. 
+5. under SSO --> AWS IAM app --> under SSO u will get a login URL.
