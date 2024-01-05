@@ -1,0 +1,11 @@
+EFS fully managed flexible, scalable NFS type file system.
+- can automatically scale from GB to PB without needing to provision storage.
+- many instance can connect to one efs, and efs gives consistance o/p to every instance.
+
+# How to create ?
+1. create EC2 instance/s
+2. create SG for EFS with destination as EC2's SG.
+3. create EFS (in mount option attach EFS SG for req. subnets)
+4. attach efs to ec2 (do ssh and run mount cmds, do sudo yum install nfs-utils/sudo apt install nfs-common to install pkg of nfs if req. as per OS)
+5. check df -h and dns name of EFS from console, should be same.
+
