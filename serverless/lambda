@@ -1,0 +1,91 @@
+* In serverless developers don't need to manage servers. just deploy code or just deploy functions.
+
+* In lambda no neeed to manage servers, good for short executions, run on demand, automatic scaling , so low cost.
+  - Only pay for per request and compute time.
+  - integration with all aws services - main ones - API gateway, kenesis, dynamoDB/s3(lambda can be triggred by them), cloudfront, cloud watch events/event bridge, cloud watch logs, sns, sqs, cognito
+  - easy monitoring through AWS Cloudwatch.
+  - easy to get more resources per function(up to 10 GB of RAM) - if u increase RAM then it improve CPU and Network.
+  - multiple language support.(nodejs,python,java,C#,go,Ruby and open source(like Rust) and lambda image container(image must implement lambda runtime api))
+
+  ============================
+  Create lambda-
+  1. first we create lambda function (give name, select runtime, copy/write code)
+  2. create test event(click on test button )event is a JSON object that mocks the structure of requests emitted by AWS services to invoke a Lambda function. no need if there is some other service is 
+     invoking lambda func. lambda need some event to invoke.
+  3. by default lambda create a role which helps lambda to create log group(cloud watch), and write logs into that group.
+  4. in monitor section we can see some metrics(invokes, errors, throttles..) and cloud watch logs.
+  5. In configuration --> permission (IAM role and its access).
+
+  ===========================
+  Limits in lambda (limits are per region)
+  *execution
+    -  memory allocation(RAM) - 128mb - 10 gb(1 mb increment), when we increase RAM we get more vCPU (vCPU is proportional to RAM)
+    -  max execution/timeout time 15 min.
+    -  default timeout is 3 sec.
+    -  env var 4kb
+    -  Disk capacity (/tmp folder) - 512mb to 10gb
+    -  1000 concurrent executions(can be increased)
+  * Deplyement
+    - deployment size (compressed zip) - 50 mb
+    - deployment size (uncompressed code+dependancies) - 250 mb
+    - can use /tmp directory to load other files at startup.
+    - env var 4kb
+=================================================
+
+* Lambda SnapStart (Its a lambda feature) - improves lambda func. performance upto 10X with no extra cost for java 11 and above.
+ - without SnapStart - steps -1. code initialisation  2. code invocation 3. shutdown
+ - with SnapStart - skip the init step (no initialise from scratch which takes a lot of time)
+ * when u deploy/publish new version lambda initialize ur func/code and take snapshot of memory and dick state. and cached for future use.
+
+ ===============================================
+ * Lambda@Edge and cloudfront functions
+ - modern app execute some logic at edge location.
+ - Edge function - is the code that runs at edge location, which is attatched to cloudfront distributions.
+ * CloudFront provide 2 types: Lambda@Edge & Cloudfront functions.
+ - no need to manage server(fully serverless), deployed globally.
+ *Use case: -customize CDN content.
+            -Website security and privacy.
+            -search engine optimization.
+            -real time image Transformation.
+            -user authentication and authorisation etc.
+
+* CloudFront Function-
+  client -->(viewer req.)-->Cloudfront-->(origin req.)-->Server then server-->(origin res.)-->Cloudfront-->(viewer res.)-->client (common CF working)
+  - lightweight function written in JS.
+  - for high scale, latency sensitive CDN customization.
+  - mil. of req./sec.
+  - change after getting viewer req. or before viewer res.(these are triggers for function)
+  -native cloudfront feature.
+  - execution time <1ms (less time for logic)
+  - Max memory - 2mb
+  - packet size - 10kb
+*function/usecase
+  - Cache key normalization.(Transform request attributes) to create optimal cache key.
+  - header manipulation in req. or res.
+  - URL rewrite or redirect.
+  - for autho. and authen. - create, validate JWT token, to allow/deny req.
+
+* Lambda@Edge -
+ - written in nodejs, python
+ - scales to 1000s of req/sec
+ - change after getting viewer req. or before viewer res. or before forward to server or after getting response from server.
+ - author ur function in us-east-1 region, then cloudfront replicates it to its locations.(these are triggers for function)
+ - execution time 5-10 sec (more complex logic can be used.)
+ - Max memory - 128mb-10gb
+ - packet size - 1mb-50mb
+* Function/use
+ - longer execution time
+ - more CPU,Memory
+ - file system access, network access so more complex logic
+
+ ========================================
+ * lambda networking
+ - by default lambda function launched in aws-owned vpc, not in ur vpc or default vpc.
+ - 
+
+ 
+ 
+
+     
+    
+  
