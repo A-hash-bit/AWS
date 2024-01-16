@@ -50,3 +50,16 @@ eg. food delivery app- where via api it access maps.
     - if using edge optimised, then cretificate must be in us-east-1
     - if regional then certificate and api gateway must be  in same region.
 * developers uses existing microservice API's for development so they need API gateway
+
+=======================================================================================
+* How to create API gateway in aws
+1. go to console 
+2. Types - HTTP,WebSocket, Rest, Rest Private (select as per requirement)
+3. Choose Method type (all,get.put....) and choose way to deploy (edge loc., regional, Private) ---and create
+4. go to API - choose "Create Method" --> Choose with what u want to integrate (lambda, http, aws service, vpc link)
+  - if lambda (create and deploy a lambda function and copy its arn here) - to integrate gateway and lambda and create.
+5. got to resources - and click on test. to check the result, logs.
+   - we can create resources with particular path, by defalut its '/' root, but we can create diffrent resource with diffrent path '/resource1' etc.
+   - and create method "get. put..." for that resource.
+6.  deploy the api - give stage name(dev, prod..) -- now u will get a invoke URL -- u can use that in browser to get the responce
+
