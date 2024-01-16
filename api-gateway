@@ -53,11 +53,13 @@ eg. food delivery app- where via api it access maps.
 
 =======================================================================================
 * How to create API gateway in aws
-1. go to console 
+1. go to console -> create API(for second time)
 2. Types - HTTP,WebSocket, Rest, Rest Private (select as per requirement)
-3. Choose Method type (all,get.put....) and choose way to deploy (edge loc., regional, Private) ---and create
-4. go to API - choose "Create Method" --> Choose with what u want to integrate (lambda, http, aws service, vpc link)
+3. Choose Method type- not for first time (all,get.put....) and choose way to deploy (edge loc., regional, Private) ---and create
+4. go to API - for first time u will see / path(resource). create a method for it.
+  choose "Create Method" (this first time will be for "/" root api) --> Choose with what u want to integrate (lambda, http, aws service, vpc link)
   - if lambda (create and deploy a lambda function and copy its arn here) - to integrate gateway and lambda and create.
+  * root '/', /api1, /resource1 or child to any path are called as "Resource" and after creating resource we create method(get, put...) for it.
 5. got to resources - and click on test. to check the result, logs.
    - we can create resources with particular path, by defalut its '/' root, but we can create diffrent resource with diffrent path '/resource1' etc.
    - and create method "get. put..." for that resource.
