@@ -1,0 +1,31 @@
+* In simple terms API is an intermidiatory between two applications that allows them to communicate with each other.
+eg. food delivery app- where via api it access maps.
+    payment option in apps uses payment api.
+
+* Types of APIs
+  - Http - api for web server/browser, it can be public or private (private api requires access token)
+  - REST (Representational State transfer) 
+    - Rest api are http apis but not all http api are rest.
+    - it is flexible, rest is not tied to methods and resources so can handle multiple types of call and handle different data formats.
+  - Web Socket - allow to create web socket which is capable of bidirectional full duplex communication over persistent TCP connection (written in JS) - eg. chat apps,streaming dashoard.
+
+* What is API gateway
+- its like a API management tool that is a computer software that sits between client and collection of backend services. it is a single entry point for all backend apis/micro-services.
+- If API is not consistant in delivering then its useless, hence API gateway is built to provide security and high availability. and does authentication and authorisation of user
+- API gateways control access to APIs to protect them, reduce API abuse, and increase their value. Additionally, an API gateway add an insulation layer between providers and consumers of APIs. 
+  At a high level, an API gateway: Authorizes and authenticates: Ensures secure access to APIs and who (authorize) can call APIs.
+- eg. of API gateways - aws API gateway, redhat 3scale, apigee, mulesoft
+
+* AWS API Gateway-
+- its aws service for creating, publishing, monitoring and maintaining REST, HTTP and websocket APIs.
+- API devlopers can create apis that access AWS or other web service, as well as data stored in aws cloud.
+
+* working of AWS API Gateway.
+  1. there can be many API so API gateway take care of authentication and authorization.
+  2. u may have to set limit(rate limiting, quotas) for api consumers.
+  3. implement multiple versions of ur API.
+  4. monitor API calls.
+  5. cache ur API req. for improved performance.
+ - for all this AWS API gateway works as abstract layer.
+
+* developers uses existing microservice API's for development so they need API gateway
