@@ -17,15 +17,36 @@ eg. food delivery app- where via api it access maps.
 - eg. of API gateways - aws API gateway, redhat 3scale, apigee, mulesoft
 
 * AWS API Gateway-
-- its aws service for creating, publishing, monitoring and maintaining REST, HTTP and websocket APIs.
+- its serverless aws service for creating, publishing, monitoring and maintaining REST, HTTP and websocket APIs.
 - API devlopers can create apis that access AWS or other web service, as well as data stored in aws cloud.
 
 * working of AWS API Gateway.
   1. there can be many API so API gateway take care of authentication and authorization.
-  2. u may have to set limit(rate limiting, quotas) for api consumers.
+  2. u may have to set limit(rate limiting, quotas) for api consumers, can do request throttling if there are too many requests.
   3. implement multiple versions of ur API.
   4. monitor API calls.
   5. cache ur API req. for improved performance.
- - for all this AWS API gateway works as abstract layer.
+  6. It can handle API versioning.
+  7. handle diffrent environment (dev,test,prod...)
+  8. AWS lambda + API gateway - no infra to manage 
+  9. create API keys
+  10. swagger can be integrated to define and export APIs
+  11. Transform and validate request and response.
+- for all this AWS API gateway works as abstract layer.
 
+* 3 Ways to deploy API gateway called API gateway Endpoint Types
+  1. Edge optimised (default) : for global clients - means API gateway is assessible from any where in the world, and req. will be routed through all edge location for high efficiency.(low latancy)
+                                API gateway is still in one region but accessible from any where.
+  2. Regional: for clients in same region as gateway.
+               can be combined with cloudfront, will work as Edge optimised (more control over some cacheing and distribution settings)
+  3. Private: can be accessed through vpc using VPC endpoint(ENI)
+
+* Security in API gateway
+ 1. user authentication through
+   - IAM roles (for internal app. running on EC2)
+   - Coginto (for external user - like mobile user)
+   - Custom Authorizer (your own logic - some lambda)
+ 2. Custom domain name HTTPS security through integration with AWS cretificate manager.
+    - if using edge optimised, then cretificate must be in us-east-1
+    - if regional then certificate and api gateway must be  in same region.
 * developers uses existing microservice API's for development so they need API gateway
