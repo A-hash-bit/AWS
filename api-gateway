@@ -53,6 +53,7 @@ eg. food delivery app- where via api it access maps.
 
 =======================================================================================
 * How to create API gateway in aws
+- we are doing Rest with lambda here
 1. go to console -> create API(for second time)
 2. Types - HTTP,WebSocket, Rest, Rest Private (select as per requirement)
 3. Choose Method type- not for first time (all,get.put....) and choose way to deploy (edge loc., regional, Private) ---and create
@@ -64,4 +65,25 @@ eg. food delivery app- where via api it access maps.
    - we can create resources with particular path, by defalut its '/' root, but we can create diffrent resource with diffrent path '/resource1' etc.
    - and create method "get. put..." for that resource.
 6.  deploy the api - give stage name(dev, prod..) -- now u will get a invoke URL -- u can use that in browser to get the responce
+7. can use lambda or cognito for auth.
+
+- Http with ec2 instance in VPC
+1. go to console -> create HTTP API -->give somem name, leave integration empty.
+2. do next next and configure "stage" which is env(dev,prod..) and check auto deploy. and create.
+3. create route("/" or '/abc" what is req.) with type/method (any,put,post,delete....) 
+4. select the method(get,put..) and add authorization and add integration
+         *authorization - here we are authenticating user with IAM authorizer(default) or JWT token or LAMBDA(custom code to auth.)
+5 add integration - for this we require following 
+ * Have ec2 instance ready and configure ALB/NLB or cloudmap for ec2.
+ * create a VPC link(for http/Rest) so that API gate way can hit ec2(private IP mapped in cloud map) in VPC
+6. click attach integration--> selete for what path/route and choose integration type/target (private resource for ec2 in a vpc).
+   then select ALB/NLB or cloud map , then select (name of ALB/NLB or Cloudmap) , give VPC link.
+7. deploy and use invoke URL
+
+* CloudMap-
+  - AWS Cloud Map is a managed solution that you can use to map logical names to the resources for an application. It also helps your applications
+    discover resources using one of the AWS SDKs, RESTful API calls, or DNS queries.
+  - steps to create-
+    1. create namespacece give a name, choose instance discovery type.
+    2. go in namespace - create service(give name)--> inside service , register instance(IP(private), ec2 ID) and done
 
