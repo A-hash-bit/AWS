@@ -10,3 +10,5 @@ requirements:
    sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -m ec2 -a status (if stopped run next cmd)
    sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -m ec2 -a start
 3. go to cloud watch --> dashboard--> check for ec2 with id and creat dashboard.
+
+* udo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -m ec2 -a stop (to stop)
