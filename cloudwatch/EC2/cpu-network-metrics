@@ -1,0 +1,12 @@
+createcloud watch dashboard for cpu and network for a ec2
+requirements:
+1. ec2 with Role/instance profile (policy- cloudWatchAgentServerPolicy).
+2. install cloudwatch agent:
+   #!/bin/bash
+   wget https://s3.amazonaws.com/amazoncloudwatch-agent/linux/amd64/latest/AmazonCloudWatchAgent.zip
+   unzip AmazonCloudWatchAgent.zip
+   sudo ./install.sh
+  
+   sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -m ec2 -a status (if stopped run next cmd)
+   sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -m ec2 -a start
+3. go to cloud watch --> dashboard--> check for ec2 with id and creat dashboard.
