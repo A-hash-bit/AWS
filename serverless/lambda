@@ -81,7 +81,19 @@
  ========================================
  * lambda networking
  - by default lambda function launched in aws-owned vpc, not in ur vpc or default vpc.
- - 
+ - so it cannot access resources in ur VPC (RDS, Elastic cache, Internal ELB..)
+ - it can access public resources (like DynamoDB)
+ - so launch lambda in VPC - pass VPC ID, subnet and SG.
+ - so lambda will create an ENI, via that it will access vpc resources.
+
+* Lambda with RDS proxy (Use case)
+- u can have multiple lambda accessing RDS at one, if multiple connection opening and closing will make many open connection.
+- if u directly connect to RDS in VPC, in future u will have many lambda thus many connections to RDS which can make RDS performance bad.(High load on DB)
+- So we create RDS proxy, it take many connections and make calls to main RDS.
+  Adv:- 1. Improve scalability by pooling and sharing DB connection.
+        2. Improve Availability by reducing 66% failover time and preserving connection.(RDS and Aurora)
+        3. security - IAM auth. at proxy level, store creds at secret manager.
+- need to create lambda in VP, as RDS proxy is private.
 
  
  
