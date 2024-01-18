@@ -1,0 +1,14 @@
+Its basically Simple Notification Service
+- makes it easy to set up, operate, and send notifications from the cloud.
+
+  * Create
+  - create topic. (FIFO or Standard Type)
+  - Encryption- by default transit encryption, but can enable encryption at rest.
+  - Access policy - who can publish/subscribe to topic.
+  - Archive/retention policy - by default SNS dont retain messages, but can give a time(1-365 days)
+  - can write delivery status logs to cloud watch, need IAM role.
+  Done with topic
+  - create subscription
+    - select topic arn.
+    - protocol (SQS) - create SQS before that
+    - select SQS arn (Endpoint)
