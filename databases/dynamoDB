@@ -1,0 +1,76 @@
+* Imp for exam point of view (asked architecture que. arount it.)
+
+- fully managed, highly available with multi AZ replication.
+- its NoSQL DB, not Relational DB, with transaction support (transaction means multiple cmds as a single bunch, one fail all will be rollback)
+- scales to massive workload, internally its distributed.
+- millions or request/sec, trillions of rows, 100s of TB of Storage.
+- single digit millisecond.Fast and consistence.
+- Integrated with IAM for security, authen. & author.
+- low cost & auto scaling.
+- No maintaineance or patching, always available, DB is always present, just go and create tables.
+- Standard Table Class for frequently access & infrequent Access(IA) Table Class.
+- Encryption at rest.
+  
+* - Items in DB are rows, can be infinite. each item have attributes(can be null)
+  - Max size of item 400kb, can't save very large object.
+  - Data type - string,num,bool,Null,  list,map, stirng set,num set, binary set.
+  - partition key + sort key = primary key
+  - inside tablwe --> create item -->add attribute(add rows)
+
+# Why to choose dynamoDB
+ 1. If schema chnages rapidly, then DynamoB is great choice.
+ 2. Read/write capacity modes
+    - control to manage table's capacity
+    1. Provisioned Mode (Default) - define how many read/write per/sec will be there. plan before hand.
+                                  - Pay for provisioned RCU/WCU(read/write capacity units) rcu/wcu is no. of read/write operations/sec. 
+                                                       generally (1rcu means 1 read operation for 4kb data)(1wcu means 1 write operation for 1kb data)
+                                  - autoscaling can be done for RCU/WCU based on load %.
+    2. On-Demand Mode - No concept of RCU/WCU, par as per use.
+                      - automatically scales, not capacity planning needed.
+  * In Amazon DynamoDB, read and write capacity refer to the provisioned throughput that you allocate to a table to handle read and write requests.
+========================================================================================
+
+    #* DAX - DynamoDB Accelerator.
+    - fully managed, highly available, seamless in-memory cache for DynamoDB.
+    - no need to change any configuration, just create DAX cluster, it will connect to DyanamoDB tables.
+      - DAX cluster will have cache nodes. 
+    - microsecond latency for cached data.
+    - default TTL of 5 mins.
+
+   * Why DAX, no Elasticache
+    - with dax - individual objects cache, query and Scan cache.
+    - with elasticache - store aggregated Result of big computation.
+
+   ## DynamoDB can do stream processing.
+      - object level modification(CRUD) in table
+      - use case-
+         - React to change(welcome email new user), real time usage analytics, Insert into derivatives tables, implement cross-region replication, invoke lambda on chnage in dynamoDB.
+    1. DyanomoDB Streams
+    2. Kenesis Data stream
+
+    Diagram:
+      application(CRUD)-->Table-->DynamoDB stream --> DyanamoDB KCLadapter/Lambda (Processing) --> SNS
+                          or  |_ _ _--->Kenesis data stream --->kenesis Data Firehose --> Amazon Redshift(Analytics) or S3(archive) or Opensearch(indexing)
+
+  ============================================================
+    * DynamoDB Global Tables
+      - Table that gets replicated across multiple regions. Two way replication (make read/write(change) in any table), its active-active replication
+      - Give low latency
+      - must enable dynamodb stream
+      - need autoscaling or on demand capacity modes.
+===================================================================
+  * TTL - feature to automatically delete items after an expiry timestamp.
+        - use case - reduce data stored, keep current items, save web session for some time,regulatory obligation..
+===================================================================
+  * Backups-
+   - Can have point in time recvery, window of 35 days. 
+   - Backup create new table
+   - scheduled/on demand backups - backup for long period, can use AWS Backup service also.
+   - no affect to performance or latency
+===================================================================
+  * S3 integration.
+    - can send/export data to S3 , need PITR(point in time recovery enabled)
+    - DynamoDB-->s3-->athena (for analysis/query)
+    - doesnot affect read capacity of table.
+    - can import form s3, doesnot consume write capacity, create new table. error logged to cloudwatch.
+    
