@@ -7,8 +7,22 @@ requirements:
    unzip AmazonCloudWatchAgent.zip
    sudo ./install.sh
   
-   sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -m ec2 -a status (if stopped run next cmd)
+   sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -m ec2 -a status 
+- output -  {
+  "status": "stopped",
+  "starttime": "",
+  "configstatus": "not configured",
+  "version": "1.300032.3b392"
+  }
+ - (if stopped run next cmd)
    sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -m ec2 -a start
+ - output - {
+  "status": "running",
+  "starttime": "2024-01-18T16:16:24+00:00",
+  "configstatus": "configured",
+  "version": "1.300032.3b392"
+   }
+
 3. go to cloud watch --> dashboard--> check for ec2 with id and creat dashboard.
 
 * udo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -m ec2 -a stop (to stop)
