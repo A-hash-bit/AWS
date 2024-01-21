@@ -1,4 +1,5 @@
-createcloud watch dashboard for cpu and network for a ec2
+createcloud watch dashboard for custom metrics for a ec2
+*NOTE- There is no need to install cloudwatch agent or have role for basic metrics. Like CPU/Network.
 requirements:
 1. ec2 with Role/instance profile (policy- cloudWatchAgentServerPolicy).
 2. install cloudwatch agent:
