@@ -1,0 +1,22 @@
+- To give user an identity to interact with our web/mobile apps.
+- users outside aws.
+* Two type
+ 1. Cognito user pools: - sign in functionality for app users.
+                        - Integrate with API Gateway & ALB
+                           - user --> cognito -->(gets a token back)-->user-->ApiGateway(APIGateway evaluate token by connecting to Cognito) --> backend(lambda)
+                           - user --> ALB --> cognito(To check if user is authenticated) Then ALB--> target group.
+    * Features - 1. it create serverless DB of users for your web and mobile apps.
+                 2. Simple login: username(or email)/ password combination.
+                 3. Password reset
+                 4. Email & Phone no verification.
+                 5. MFA
+                 6. Integrate with federated Identities - user from facebook, google, SAML
+
+ 2. Cognito Identity pools (Federated Identity) - to provide temporary AWS credentials so they can access AWS resource directly.
+                        - Integrate with cognito user pool as Identity provider.
+      web/mobile app --> login & get Token (Google, Facebook,saml,openId,cognito user pool)--> user --> exchange token for temp. aws creds to-->identity pool
+      identity pool authenticate token with(Google, Facebook,saml,openId,cognito user pool) -->use aws service
+
+
+* Cognito is for -hundreds of users, mobile users, SAML authentication.
+                            
