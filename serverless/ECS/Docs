@@ -1,0 +1,27 @@
+ECS is managed container orchestrator (like docker swarm, k8s)
+- orchestrator - to manage lifecycle of containers Create/restart/destroy. Get resource/server for containers.
+               - Deploy and Load balance application across multiple servers.
+               - Auto scale as per traffic.
+               - Rolling out changes without downtime.
+
+* With docker compose wwe can deploy docker cont. on one server only.
+
+## ECS architeture
+* ECS has 2 launch type
+  - EC2 - we have to manages ec2, install docker, install ecs agent so ecs control plane will talk to nodes, install firewall so certain ports will be open, patches.
+        - ecs is like control plane and clutser are nodes where u deploy.
+        - more control
+  - Fargate - aws will manage underlying infra.
+            - now we will have ecs control plane, cluster and fargate.
+            - fargate will create servers on demand by ecs inside the cluster.
+            - pay what u use.
+* ECS cluster - ECS just know how ur app. will get deployed but doesn't have any other service(servers and other resource), its can just create/delete containers. 
+                but it needs underlying infra.
+                cluster is that resource, bunch of servers. and ecs is responsible to deploy it on those servers.
+* Ecs task defination - blueprint on how ur container should launch, how much CPU/Mem, Image/Ports/Volumes.
+* Task - is instance of task defination.
+* ECS service - it ensure that a cretain no of tasks are running at all times, restart cont. that have exited/crashed. create new insance if one fails.
+* Load balancers - take an LB assign it to service.
+
+* Create Cluster - give name, choose ec2 (asg, OS,AMI,Networking,SG etc....), fargate, External instances using ECS Anywhere.
+                 - monitoring - enable conatiner insight for server metrics.
