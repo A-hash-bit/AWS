@@ -1,0 +1,33 @@
+# Prerequisite
+* cmds for (linux/debian)
+AWS CLI – A command line tool for working with AWS services, including Amazon EKS. After installing the AWS CLI, we recommend that you also configure it.
+        - sudo apt install awscli 
+        - aws configure
+kubectl – A command line tool for working with Kubernetes clusters. 
+        - curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+        - curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+        - echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
+        - sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+        - kubectl version --client 
+eksctl – A command line tool for working with EKS clusters that automates many individual tasks.
+       - curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+       - sudo mv /tmp/eksctl /usr/local/bin
+       - eksctl version
+
+# Create cluster with fargate
+* usually in org. preffered way is cmd not UI.
+- eksctl create cluster --name my-eks-cluster-1 --region us-east-1 --fargate  (if u don't have preference for OS. else use fargate or ec2)
+- eksctl create cluster --name my-eks-cluster-1 --zones us-east-1a,us-east-1b,us-east-1c --fargate (if default az is not available at movement due to some reason provide --zones)
+Default Behavior:
+If you don't specify any VPC-related options during cluster creation, eksctl creates a new, dedicated VPC for your EKS cluster.
+This VPC is configured with:
+A CIDR block of 192.168.0.0/16 (can be customized).
+Three private subnets spread across three Availability Zones, Three public subnets spread across three Availability Zones, A managed NAT gateway in each public subnet for internet access from private subnets.
+Necessary routing tables and security groups to control inbound and outbound traffic to and from the cluster's components.
+- If you enable Fargate, a Fargate profile tells Kubernetes to use serverless Fargate for running workloads.(Fargate automatically scales your cluster)
+- Necessary networking components like VPC endpoints for ECR and S3 are created for secure communication within the VPC.
+- generates a kubeconfig file, allowing you to interact with the cluster using kubectl.
+
+# Delete - eksctl delete cluster --name my-eks-cluster-1 --region us-east-1
+
+'eksctl utils update-cluster-logging --enable-types={SPECIFY-YOUR-LOG-TYPES-HERE (e.g. all)} --region=us-east-1 --cluster=my-eks-cluster (To enable logging, by default its off)
