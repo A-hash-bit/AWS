@@ -37,8 +37,8 @@ Default Behavior while create cluster:
  - eksctl create fargateprofile \
     --cluster my-eks-cluster-1 \
     --region us-east-1 \
-    --name <profile-name> \
-    --namespace <name-space>
+    --name <profile-name> \   (alb-sample-app)
+    --namespace <name-space>    (ns- game-2048)
 4. for ingree we need ingress controller, otherwise your service won't get an external IP & ingress will also not get address(alb-address)
   - ingree controller  will create an LB and takes care of target group, port(according to ingress.yaml)  
   - Prerequisite for ingress controller.
@@ -48,18 +48,18 @@ Default Behavior while create cluster:
 - aws iam create-policy \
     --policy-name AWSLoadBalancerControllerIAMPolicy \
     --policy-document file://iam_policy.json              ------(policy so alb controller pods can talk to aws alb)
-- eksctl create iamserviceaccount \
+- eksctl create iamserviceaccount \        (req. OIDC to creste serviceaccount)
   --cluster=<your-cluster-name> \
   --namespace=kube-system \
   --name=aws-load-balancer-controller \
   --role-name AmazonEKSLoadBalancerControllerRole \
   --attach-policy-arn=arn:aws:iam::<your-aws-account-id>:policy/AWSLoadBalancerControllerIAMPolicy \
   --approve                                               ------(Role for above policy And attatching it to serviceaccount)
+* install helm first
  - helm repo add eks https://aws.github.io/eks-charts (to get alb controller helm charts)
  - helm repo update eks
 * By default it will create 2 replicas
- - helm install aws-load-balancer-controller eks/aws-load-balancer-controller \            
-  -n kube-system \
+ - helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system \
   --set clusterName=<your-cluster-name> \
   --set serviceAccount.create=false \
   --set serviceAccount.name=aws-load-balancer-controller \
@@ -74,4 +74,8 @@ Default Behavior while create cluster:
 * eksctl utils update-cluster-logging --enable-types={SPECIFY-YOUR-LOG-TYPES-HERE (e.g. all,API server, Audit, Authenticator, Controller manager, scheduler)} --region=us-east-1 --cluster=my-eks-cluster 
   - (To enable logging, by default its off)
 
+# Issue faced - while using helm/kubectl cmd getting error: exec plugin: invalid apiVersion "client.authentication.k8s.io/v1alpha1"
+issue was may be the version in kubeconfig file
+- vim ~/.kube/config
 * For reference -https://github.com/iam-veeramalla/aws-devops-zero-to-hero/tree/main/day-22
+Kustomize is aws use it for k8s?
