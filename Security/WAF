@@ -1,0 +1,8 @@
+steps:
+- select cloudfront/other resources(Application Load Balancers, Amazon API Gateway REST APIs, Amazon App Runner services, AWS AppSync GraphQL APIs, Amazon Cognito user pools and AWS Verified Access Instances)
+- select region
+- Add rules (first make IP sets - IP range u want to allow/deny) 
+or 
+- Rule builder - u can have more action(dependinf on some header/body/query parameter/country/IP...)
+or 
+- Rule group
