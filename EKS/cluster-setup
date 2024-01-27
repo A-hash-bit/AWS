@@ -16,18 +16,62 @@ eksctl – A command line tool for working with EKS clusters that automates many
 
 # Create cluster with fargate
 * usually in org. preffered way is cmd not UI.
-- eksctl create cluster --name my-eks-cluster-1 --region us-east-1 --fargate  (if u don't have preference for OS. else use fargate or ec2)
+1. - eksctl create cluster --name my-eks-cluster-1 --region us-east-1 --fargate  (if u don't have preference for OS. else use fargate or ec2)
 - eksctl create cluster --name my-eks-cluster-1 --zones us-east-1a,us-east-1b,us-east-1c --fargate (if default az is not available at movement due to some reason provide --zones)
-Default Behavior:
-If you don't specify any VPC-related options during cluster creation, eksctl creates a new, dedicated VPC for your EKS cluster.
-This VPC is configured with:
-A CIDR block of 192.168.0.0/16 (can be customized).
-Three private subnets spread across three Availability Zones, Three public subnets spread across three Availability Zones, A managed NAT gateway in each public subnet for internet access from private subnets.
-Necessary routing tables and security groups to control inbound and outbound traffic to and from the cluster's components.
-- If you enable Fargate, a Fargate profile tells Kubernetes to use serverless Fargate for running workloads.(Fargate automatically scales your cluster)
-- Necessary networking components like VPC endpoints for ECR and S3 are created for secure communication within the VPC.
-- generates a kubeconfig file, allowing you to interact with the cluster using kubectl.
+Default Behavior while create cluster:
+ - If you don't specify any VPC-related options during cluster creation, eksctl creates a new, dedicated VPC for your EKS cluster.
+- This VPC is configured with:
+  A CIDR block of 192.168.0.0/16 (can be customized).
+  Three private subnets spread across three Availability Zones, Three public subnets spread across three Availability Zones, A managed NAT gateway in each public subnet for internet access from private subnets.
+  Necessary routing tables and security groups to control inbound and outbound traffic to and from the cluster's components.
+ - If you enable Fargate, a Fargate profile tells Kubernetes to use serverless Fargate for running workloads.(Fargate automatically scales your cluster)
+ - Necessary networking components like VPC endpoints for ECR and S3 are created for secure communication within the VPC.
+ - generates a kubeconfig file, allowing you to interact with the cluster using kubectl.
+* After cluster get created we get a OpenID connect URL. - so u can attatch any IDP for user management or u can use IAM.
+* it creates a fargate profile, by default it has access to only default & kubesystem namespace. To have access to other ns add new fargate profile.
 
+2. - Get kubeconfig file so we can use kubectl cmd.
+ - aws eks update-kubeconfig --name my-eks-cluster-1 --region us-east-1
+
+3. create fargate profile for particuler namespace
+ - eksctl create fargateprofile \
+    --cluster my-eks-cluster-1 \
+    --region us-east-1 \
+    --name <profile-name> \
+    --namespace <name-space>
+4. for ingree we need ingress controller, otherwise your service won't get an external IP & ingress will also not get address(alb-address)
+  - ingree controller  will create an LB and takes care of target group, port(according to ingress.yaml)  
+  - Prerequisite for ingress controller.
+    - eksctl utils associate-iam-oidc-provider --cluster my-eks-cluster-1 --approve (associate IAM OIDC so that ALB controller can access aws LB.)
+* Download & Install alb controller
+- curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.5.4/docs/install/iam_policy.json (its a standard json)
+- aws iam create-policy \
+    --policy-name AWSLoadBalancerControllerIAMPolicy \
+    --policy-document file://iam_policy.json              ------(policy so alb controller pods can talk to aws alb)
+- eksctl create iamserviceaccount \
+  --cluster=<your-cluster-name> \
+  --namespace=kube-system \
+  --name=aws-load-balancer-controller \
+  --role-name AmazonEKSLoadBalancerControllerRole \
+  --attach-policy-arn=arn:aws:iam::<your-aws-account-id>:policy/AWSLoadBalancerControllerIAMPolicy \
+  --approve                                               ------(Role for above policy And attatching it to serviceaccount)
+ - helm repo add eks https://aws.github.io/eks-charts (to get alb controller helm charts)
+ - helm repo update eks
+* By default it will create 2 replicas
+ - helm install aws-load-balancer-controller eks/aws-load-balancer-controller \            
+  -n kube-system \
+  --set clusterName=<your-cluster-name> \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=aws-load-balancer-controller \
+  --set region=<region> \
+  --set vpcId=<your-vpc-id>  (get vpc from EKS UI under networking)
+
+5. Deploy the application
+- kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.5.4/docs/examples/2048/2048_full.yaml 
+  - (step 3 helps to get access to nsmaespace deploy pods )
 # Delete - eksctl delete cluster --name my-eks-cluster-1 --region us-east-1
 
-'eksctl utils update-cluster-logging --enable-types={SPECIFY-YOUR-LOG-TYPES-HERE (e.g. all)} --region=us-east-1 --cluster=my-eks-cluster (To enable logging, by default its off)
+* eksctl utils update-cluster-logging --enable-types={SPECIFY-YOUR-LOG-TYPES-HERE (e.g. all,API server, Audit, Authenticator, Controller manager, scheduler)} --region=us-east-1 --cluster=my-eks-cluster 
+  - (To enable logging, by default its off)
+
+* For reference -https://github.com/iam-veeramalla/aws-devops-zero-to-hero/tree/main/day-22
