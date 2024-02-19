@@ -1,0 +1,26 @@
+* to migrate DB from on-prem to AWS Cloud 
+ - Use - DMS (Database Migration service)
+        - it securely migrate DB to aws, resilient, self healing.
+        - from one type of DB to same type of DB (oracle to oracle, sql to sql etc.)
+        - from one type to other type (from oracle to postgress etc..)
+        - Continious data replication using CDC. (continious data capture)
+        - Need to create a ec2 instance to perform migration/replication from source DB to Target DB.
+        - if source and target DB engines are different then only need to use SCT(schema conversion tool). so DMS+SCT (SCT will be installed on on-prem), DMS instance in public subnet.
+        - DMS instance is multi AZ.
+
+In AWS DMS UI for DMS instance - 1. Give name.
+                2. Choose replication instance type (as per amount of data for fast relication.)
+                3. Storage, VPC, If multi AZ, KMS key for encryption.
+Then create source and target endpoints.
+then create new DB migration task - 
+* we can migrate whole data or only new/changed data
+
+* Migrate from RDS to Aurora
+- 1. RDS MySQL DB snapshot -> restore Aurora MySql DB (downtime as RDS need to stop)
+  2. Create Aurora read replica from RDS and then when lag is 0 make read replica as main Aurora instance. more cost for data transfer.
+  3. Create a backup file put it in S3 --> from that craate new Aurora cluster.
+  4. Create MYSql dump ---> sned to Aurora and create new DB cluster.
+  5. Or use AWS DMS service.
+
+* On Prem strategies
+- 
