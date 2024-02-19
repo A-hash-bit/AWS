@@ -1,0 +1,26 @@
+* Disaster Recovery
+- DR is about preparing for and recovering from a disaster.
+- how to do DR
+  - On-premises - having secondary infra. on On-premises  , costly.
+  - Hybrid - having cloud as secondary infra.
+  - Full cloud - both infra on cloud.
+
+* RPO - recovery point objective - last point till where we can recover(last backup) -  data loss
+* RTO - recovery time objective - after disaster in how much time we can recover. - downtime
+
+* DR Startegies
+- Backup and Restore - High RPO, High RTO, Less cost, need only storage cost.
+- Pilot Light - Small copy of ur infra and application is always running on cloud,ur DB is constantly coping from main db but EC2 is not running. thus small RTO/RPO, just failover to other instance from route53.
+- Warm Standby - system running with minimum size but can be scale to production level. secondary DB will always keep replication data from main DB
+- Hot Site/ Multi Site Approach - having full prodution scale system running, low RTO.RPO, high cost. secondary DB will always keep replication data from main DB.
+
+* Backups- 1. EBS snapshots, RDS auto backup/snapshots
+           2. Push data to s3(use lifecycle), cross region replication.
+           3. use snowball/storage gateway to copy data from on-premises.
+* High availability- 1. Use route53 for failover routing
+                     2. RDS multi AZ, Elastic cache Multi AZ etc.
+                     3. Have site-to-site VPN as backup for AWS direct connect.
+* Replication - 1. RDS cross region replication, AWS aurora + global DB
+                2. DB replication from on-prem to RDS
+                3. Storage gateway
+* Automation- IAC tool to re-create new env.
