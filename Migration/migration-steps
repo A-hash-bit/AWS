@@ -1,0 +1,23 @@
+# 1 - VM migration (from private data center)
+Steps - 1. Create/Get VMDK file (Its a kind of backup file of VM)
+        2. Create an S3 bucket. & upload the vmdk file to s3.
+        3. Create a IAM Role(named -"vmimport") for EC2 with permission of (VM import export full access) and edit trust relationship to "vmie" instead of "ec2"
+            - (so that it can convert the vmdk to AMI)  - need to give ec2 and s3 full access but if import cmd don't work May need to give admin access
+        4. configure the AWS user (install AWS cli if not) where the VM is. 
+        5. Create a json file on the system where the VM is. (containers.json)
+        [{
+          "Description": "<migration>",
+          "Format": "vmdk",
+          "UserBucket"{
+              "S3Bucket": "<bucket name>",
+              "S3Key": "<object-name-in-bucket>"
+          }}]
+      6. run the following cmd
+      -> aws ec2 import-image --description "<migration>" --disk-containers "file://<path/to/containers.json>"   (it will create AMI from vmdk)
+      -> aws ec2 describe-import-image-tasks --import-task-ids <ami-id>   (get ami-id from O/P of above task) - to monitor the progress.
+      7. go to ec2 -->AMI --> find ur new image (import-ami-..)
+      8. Now launch a new instance from this ami 
+      9. SSH to ec2 with same creads that ur VM has
+
+    # 2 - DB Migration (from private data center)
+    -
