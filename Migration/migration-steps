@@ -1,3 +1,4 @@
+* There are 2 type of migration Cold & live , Cold when VM is stopped, Live when VM is running.
 # 1 - VM migration (from private data center)
 Steps - 1. Create/Get VMDK file (Its a kind of backup file of VM)
         2. Create an S3 bucket. & upload the vmdk file to s3.
