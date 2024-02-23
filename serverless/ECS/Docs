@@ -21,7 +21,7 @@ ECS is managed container orchestrator (like docker swarm, k8s)
 * Ecs task defination - blueprint on how ur container should launch, how much CPU/Mem, Image/Ports/Volumes.
 * Task - is instance of task defination.
 * ECS service - it ensure that a cretain no of tasks are running at all times, restart cont. that have exited/crashed. create new insance if one fails.
-* Load balancers - take an LB assign it to service.
+* Load balancers - take an LB assign it to service, ECS service can have multiple LBs.(External LB/internal LB)
 
 * Create Cluster - give name, choose ec2 (asg, OS,AMI,Networking,SG etc....), fargate, External instances using ECS Anywhere.
                  - monitoring - enable conatiner insight for server metrics.
