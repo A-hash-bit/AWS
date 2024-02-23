@@ -20,4 +20,7 @@ Steps - 1. Create/Get VMDK file (Its a kind of backup file of VM)
       9. SSH to ec2 with same creads that ur VM has
 
     # 2 - DB Migration (from private data center)
-    -
+        - Go To DB migration service (DMS)
+          - create replication instance (we can do on demand or scheduled)  -Create a role For DMS with admin or required access.
+          - Create Endpoints (source abd target)
+          - Create DB migration task (select if u want to migrate old data/ old+running data/ only new data)
