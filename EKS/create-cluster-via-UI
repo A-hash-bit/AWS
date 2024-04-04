@@ -1,4 +1,4 @@
-# https://github.com/Bhoopesh123/k8s-concepts 
+# https://github.com/Bhoopesh123/k8s-concepts  (+ start/stop ec2 with lambda)
 1 Go to EKS 
 2 Give name, select version
 - Create an eks-cluster-role  - IAM - choose "AWS service" -choose EKS (EKS-Cluster) next (Give name to role)
