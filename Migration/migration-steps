@@ -1,3 +1,24 @@
+* Preparation for Migration
+- Steps:
+  1. Preparation - Lets say you are working with 200 microservices, or if you have monolithic app then first it needs to be converted in microservice.
+  2. Planning - Divide services into phases, decide which services will migrate in initial phase and later. Noncritical goes first, critical after that. & which migration strategies
+  3. Migrate - actual migration, will use terraform, ansible for infra, shell/cron jobs etc
+
+  4. Monitor - monitor each phase for 1-2 months, then go with second phase.
+  5. Optimise
+
+* Migration Strategies
+1. Rehost - Lift and shift (u have k8s on data center now u will create same infra on cloud and move apps there), Works if app are independant of underlying infra. 
+2. Replatform - you will try to use cloud features (RDS, EKS) for scaliablity, high availability    
+3. Refactore/Rearchitecture  - will go for best/new tools from cloud and open source
+4. Repurchase - purchase same services
+5. Relocate - you were using k8s on prem now moved to EKS.(can be costly)
+6. Retire - 
+7. Retain - Keeps some on old infra(Banking secure apps). move some apps.
+
+
+
+===============================================================================================================================================================
 * There are 2 type of migration Cold & live , Cold when VM is stopped, Live when VM is running.
 # 1 - VM migration (from private data center)
 Steps - 1. Create/Get VMDK file (Its a kind of backup file of VM)
