@@ -1,0 +1,30 @@
+# https://github.com/Bhoopesh123/k8s-concepts 
+1 Go to EKS 
+2 Give name, select version
+- Create an eks-cluster-role  - IAM - choose "AWS service" -choose EKS (EKS-Cluster) next (Give name to role)
+3 add role eks-cluster-role while creating EKS
+4 Don't do anything in networking (can use default), can skip security group (EKS will create a SG for control plane)
+5 select public/private or private endpoint (with public you don't get to setup promethheus by AWS)  -next
+6 (Add ONs) kubeproxy, coreDNS, aws VPC CNI + Amazon EKS Pod Identity Agent (select)
+7. Next & review & create.
+* Attach nodegroup
+  1. Go inside of cluster
+  2. Give name
+  - Create Node IAM role - IAM - choose "AWS service" -choose ec2 -add AmazonEKSWorkerNodePolicy, AmazonEC2ContainerRegistryReadOnly, AmazonEKS_CNI_Policy 
+    next (Give name to role) done
+  3. choose the Node group role
+  4. optional to choose lanch templates, k8s lables, taints etc.. next
+  5. Select compute & Scaling configuration (AMI, Instance type, Disk size, scaling config,)
+    - select no./percentage of nodes can be unavailable while node group upgrade.
+  6. optional select subnets. and Create.
+
+
+* How to connect to eks cluster
+    1.Install aws cli (if not present)
+    2. aws configure 
+    3. aws sts get-caller-identity
+    4. aws eks --region <region> update-kubeconfig --name eks-first-cluster
+Run a sample workload
+  - install kubectl
+  - kubectl run my-nginx --image=nginx
+    
