@@ -27,7 +27,7 @@
 1. Go to cluster--> compute--> Fargate--> create/configure fargate profile - give name, add IAM role(AmazonEKSFargatePodExecutionRolePolicy)
 2. create namespace/s (demo, kube-system + add lable (k8s-app:core-dns))
  * EKS use fargate profile to create/manages farget cluster.
- 
+3. check core dns pod/deploymet (if pending) try -kubectl rollout restart -n kube-system deployment coredns
 
 * How to connect to eks cluster
     1.Install aws cli (if not present)
